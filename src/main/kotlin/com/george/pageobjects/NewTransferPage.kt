@@ -17,12 +17,6 @@ class NewTransferPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driv
     @AndroidFindBy(xpath="//android.widget.TextView[contains(@resource-id, 'subtitle')]")
     private var newTransferPageHookLocator: WebElement? = null
 
-    @AndroidFindBy(id="navigation_toolbar")
-    private var navigationToolbar: WebElement? = null
-
-    @AndroidFindBy(xpath="//*[@class='android.widget.TextView' and contains(@text, 'Own transfer')]")
-    private var ownTransfer: WebElement? = null
-
     @AndroidFindBy(id = "amount_input")
     private var amountInput: WebElement? = null
 
@@ -46,6 +40,13 @@ class NewTransferPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driv
 
     @AndroidFindBy(xpath="//android.widget.ImageButton[@content-desc='Close']")
     private var afterTransferCloseBtn: WebElement? = null
+
+    @AndroidFindBy(xpath="//android.widget.ImageButton[@content-desc='Back']")
+    private var backbtn: WebElement? = null
+
+    @AndroidFindBy(xpath="//android.widget.ImageButton[@content-desc='Navigate up']")
+    private var navigationUpBtn: WebElement? = null
+
 
     fun waitForFirstAccountOwnTransfer(){
         testUtils.waitForWebElement(driver, transferOwnFirstAccountPanel)
@@ -95,6 +96,20 @@ class NewTransferPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driv
 
     fun waitForNewTransferPage(){
         testUtils.waitForWebElement(driver, newTransferPageHookLocator)
+    }
+
+    fun isNextButtonsEnabled(): Boolean {
+        return actionNext?.getAttribute("enabled").toBoolean()
+    }
+
+    fun clickBackBtn(){
+        testUtils.waitForWebElement(driver, backbtn)
+        backbtn?.click()
+    }
+
+    fun clickNavigationUpBtn(){
+        testUtils.waitForWebElement(driver,navigationUpBtn)
+        navigationUpBtn?.click()
     }
 
 

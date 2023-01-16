@@ -17,16 +17,8 @@ class OverviewPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driver,
     @AndroidFindBy(xpath = "//androidx.cardview.widget.CardView//android.widget.Button[@text='New Transfer'][1]")
     private var firstNewTransferButton: WebElement? = null
 
-    @AndroidFindBy(xpath = "//androidx.cardview.widget.CardView//android.widget.FrameLayout/android.view.ViewGroup/android.widget.TextView[1]")
-    private var firstCardViewTextEl: WebElement? = null
-
-
-    @AndroidFindBy(xpath = "//android.widget.Button[@content-desc='Profile']")
-    private var profileIconPage: WebElement? = null
-
     @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id='cz.csas.georgego:id/balance'][1]")
     private var firstCardViewBalance: WebElement? = null
-
 
     @AndroidFindBy(xpath="//*[@class='android.widget.TextView' and contains(@text, 'Sorry, not interested')]")
     private var sorryNotInterestedButton: WebElement? = null
@@ -41,8 +33,8 @@ class OverviewPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driver,
     }
 
 
-    fun  getBalanceOfFirstCardView(): String? {
-        return firstCardViewBalance?.text
+    fun  getBalanceOfFirstCardView(): Int {
+        return Integer.parseInt(firstCardViewBalance?.text?.split(",")?.get(0)?.replace("\\p{Z}".toRegex(), ""))
     }
 
     fun clickSorryNotInterestedBtn(){

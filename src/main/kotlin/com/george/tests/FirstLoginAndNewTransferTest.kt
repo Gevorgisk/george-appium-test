@@ -3,6 +3,7 @@ package com.george.tests
 import com.george.base.AppiumSetup
 import com.george.pageobjects.*
 import org.testng.Assert
+import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 
 /**
@@ -13,8 +14,8 @@ class FirstLoginAndNewTransferTest : AppiumSetup() {
 
     @Test
     fun loginViaPattern() {
-        val homePage = HomeBasePage(driver!!, testUtils)
-        val loginPage = LoginPage(driver!!, testUtils)
+        val homePage = HomeBasePage(driver, testUtils)
+        val loginPage = LoginPage(driver, testUtils)
         val accessMethodPage = AccessMethodPage(driver, testUtils)
 
         homePage.waitForMainPage()
@@ -45,35 +46,52 @@ class FirstLoginAndNewTransferTest : AppiumSetup() {
         accessMethodPage.clickOnboardingDoneBtn()
 
     }
-
-    @Test(dependsOnMethods = ["loginViaPattern"])
-    fun makeNewTransfer(){
-        var overviewPage = OverviewPage(driver, testUtils)
-        var newTransferPage = NewTransferPage(driver, testUtils)
+    @DataProvider(name = "transferInputs")
+    fun primeNumbers(): Array<Array<Any>> {
+        return arrayOf(
+            arrayOf("400", true, true),
+            arrayOf("0", false, false),
+            arrayOf("", false, false),
+            arrayOf("40", false, true))
+    }
+    @Test(dependsOnMethods = ["loginViaPattern"], dataProvider = "transferInputs")
+    fun makeNewTransfer(amountToTransfer:String, sorryNotInterested:Boolean, isAmountPositive:Boolean){
+        val overviewPage = OverviewPage(driver, testUtils)
+        val newTransferPage = NewTransferPage(driver, testUtils)
 
         overviewPage.waitForOverviewPage()
-        val initialBalanceOfFirstCardView = Integer.parseInt(overviewPage.getBalanceOfFirstCardView()?.split(",")?.get(0)?.replace("\\p{Z}".toRegex(), ""))
+        val initialBalanceOfFirstCardView = overviewPage.getBalanceOfFirstCardView()
         overviewPage.clickFirstNewTransferBtn()
         newTransferPage.waitForNewTransferPage()
         newTransferPage.waitForFirstAccountOwnTransfer()
         newTransferPage.clickFirstAccountOwnTransfer()
-        newTransferPage.waitAndSendAmountInput("400")
-        newTransferPage.waitAndClickActionNext()
-        newTransferPage.waitAndClickSignBtn()
-        newTransferPage.waitAndSendCodeInput("000000")
-        newTransferPage.waitAndClickSubmitCodeBtn()
-        newTransferPage.waitForThankYouMessage()
-        newTransferPage.waitForConfirmMessage()
-        newTransferPage.waitAndClickCloseBtnAfterTransfer()
+        newTransferPage.waitAndSendAmountInput(amountToTransfer)
+        if (isAmountPositive){
+            newTransferPage.waitAndClickActionNext()
+            newTransferPage.waitAndClickSignBtn()
+            newTransferPage.waitAndSendCodeInput("000000")
+            newTransferPage.waitAndClickSubmitCodeBtn()
+            newTransferPage.waitForThankYouMessage()
+            newTransferPage.waitForConfirmMessage()
+            newTransferPage.waitAndClickCloseBtnAfterTransfer()
 
-        overviewPage.clickSorryNotInterestedBtn()
-        overviewPage.waitForOverviewPage()
+            if (sorryNotInterested){
+                overviewPage.clickSorryNotInterestedBtn()
+            }
+            overviewPage.waitForOverviewPage()
 
-        val balanceAfterTransaction = Integer.parseInt(overviewPage.getBalanceOfFirstCardView()?.split(",")?.get(0)?.replace("\\p{Z}".toRegex(), ""))
+            val balanceAfterTransaction = overviewPage.getBalanceOfFirstCardView()
 
-//        validation
-        Assert.assertEquals(balanceAfterTransaction,initialBalanceOfFirstCardView - 400,  "The balance after the transaction (400Kc) is not as expected, before: '"+
-        + initialBalanceOfFirstCardView + "', after '" + balanceAfterTransaction + "'")
+    //        validation
+            // validate that the initial balance was reduced by 400 after the transfer
+            Assert.assertEquals(balanceAfterTransaction,initialBalanceOfFirstCardView - Integer.parseInt(amountToTransfer),  "The balance after the transaction (400Kc) is not as expected, before: '"+
+            + initialBalanceOfFirstCardView + "', after '" + balanceAfterTransaction + "'")
 
+            // similarly we should validate that another card balance (where transferred to) is increased by 400
+        } else {
+            Assert.assertEquals(newTransferPage.isNextButtonsEnabled(), false,"Expected false but got true, Next button is enabled")
+            newTransferPage.clickBackBtn()
+            newTransferPage.clickNavigationUpBtn()
+        }
     }
 }
