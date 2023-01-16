@@ -1,3 +1,3 @@
 
-rootProject.name = "george-interview-project"
+rootProject.name = "george-appium-test"
 
