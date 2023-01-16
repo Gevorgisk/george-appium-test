@@ -1,6 +1,6 @@
 package com.george.tests
 
-import com.george.base.AppiumSetup
+import com.george.base.LoginBaseTest
 import com.george.pageobjects.*
 import org.testng.Assert
 import org.testng.annotations.DataProvider
@@ -10,42 +10,14 @@ import org.testng.annotations.Test
  * Created By Gevorg Iskandaryan
  * This test does first login and makes new transfer
  */
-class FirstLoginAndNewTransferTest : AppiumSetup() {
+class FirstLoginNewTransferTestOwnAccount : LoginBaseTest() {
 
     @Test
     fun loginViaPattern() {
-        val homePage = HomeBasePage(driver, testUtils)
-        val loginPage = LoginPage(driver, testUtils)
-        val accessMethodPage = AccessMethodPage(driver, testUtils)
-
-        homePage.waitForMainPage()
-
-        homePage.clickLoginToGeorgeBtn()
-
-        loginPage.waitAndClickLoginDemoUserBtn()
-
-        loginPage.waitForLoginToGeorgePage()
-        loginPage.waitAndClickSecondLoginButton()
-
-        accessMethodPage.waitAccessMethodPage()
-        accessMethodPage.clickPatterAccessMethod()
-
         val listOfBullets = listOf("1", "3", "8", "11")
-
-        // call the drawPattern twice since the application requires it to be drawn twice for security purposes
-        for (i in 1..2){
-            accessMethodPage.drawPattern(listOfBullets)
-        }
-
-        accessMethodPage.waitForSetupSuccessPage()
-        accessMethodPage.clickDoneAfterSetup()
-
-        accessMethodPage.clickMaybeLaterBtn()
-        accessMethodPage.clickNotNowBtn()
-        accessMethodPage.clickProceedWoPermissionBtn()
-        accessMethodPage.clickOnboardingDoneBtn()
-
+        firstLoginWithPattern(listOfBullets)
     }
+
     @DataProvider(name = "transferInputs")
     fun primeNumbers(): Array<Array<Any>> {
         return arrayOf(
@@ -83,8 +55,8 @@ class FirstLoginAndNewTransferTest : AppiumSetup() {
             val balanceAfterTransaction = overviewPage.getBalanceOfFirstCardView()
 
     //        validation
-            // validate that the initial balance was reduced by 400 after the transfer
-            Assert.assertEquals(balanceAfterTransaction,initialBalanceOfFirstCardView - Integer.parseInt(amountToTransfer),  "The balance after the transaction (400Kc) is not as expected, before: '"+
+            // validate that the initial balance was reduced by X after the transfer
+            Assert.assertEquals(balanceAfterTransaction,initialBalanceOfFirstCardView - Integer.parseInt(amountToTransfer),  "The balance after the transaction is not as expected, before: '"+
             + initialBalanceOfFirstCardView + "', after '" + balanceAfterTransaction + "'")
 
             // similarly we should validate that another card balance (where transferred to) is increased by 400

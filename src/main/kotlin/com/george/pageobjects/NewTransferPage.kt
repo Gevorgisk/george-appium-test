@@ -47,6 +47,8 @@ class NewTransferPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driv
     @AndroidFindBy(xpath="//android.widget.ImageButton[@content-desc='Navigate up']")
     private var navigationUpBtn: WebElement? = null
 
+    @AndroidFindBy(xpath="//*[@class='android.widget.TextView' and @text='Manual Transfer']")
+    private var manualTransferNode: WebElement? = null
 
     fun waitForFirstAccountOwnTransfer(){
         testUtils.waitForWebElement(driver, transferOwnFirstAccountPanel)
@@ -112,5 +114,9 @@ class NewTransferPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driv
         navigationUpBtn?.click()
     }
 
+    fun clickManualTransferNode(){
+        testUtils.waitForWebElement(driver,manualTransferNode)
+        manualTransferNode?.click()
+    }
 
 }
