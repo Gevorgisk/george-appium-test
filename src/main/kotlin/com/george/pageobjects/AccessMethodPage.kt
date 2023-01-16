@@ -9,7 +9,7 @@ import org.openqa.selenium.interactions.Actions
 
 /**
  * Created By Gevorg Iskandaryan
- * Page object of access method page
+ * access method page
  */
 class AccessMethodPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driver, testUtils) {
     @AndroidFindBy(id = "erste_locker_tv_choose_ea_title")

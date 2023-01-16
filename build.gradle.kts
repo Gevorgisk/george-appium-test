@@ -27,9 +27,6 @@ dependencies {
     implementation("org.seleniumhq.selenium:selenium-api:4.7.2")
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-remote-driver
     implementation("org.seleniumhq.selenium:selenium-remote-driver:4.7.2")
-
-
-
 }
 
 tasks.test {
