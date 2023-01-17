@@ -9,7 +9,6 @@ import org.testng.annotations.DataProvider
 import org.testng.annotations.Test
 
 class NewMessageTest: LoginBaseTest() {
-    private
 
     @DataProvider(name = "messageInputs")
     fun testInputs(): Array<Array<Any>> {
