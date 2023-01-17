@@ -16,7 +16,7 @@ class FirstLoginNewManualTransferTest: LoginBaseTest() {
     }
 
     @DataProvider(name = "transferInputs")
-    fun primeNumbers(): Array<Array<Any>> {
+    fun testInputs(): Array<Array<Any>> {
         return arrayOf(
             arrayOf("Abala", "300", true, true),
             arrayOf("Brindzik", "0", false, false),

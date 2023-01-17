@@ -23,6 +23,9 @@ class OverviewPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driver,
     @AndroidFindBy(xpath="//*[@class='android.widget.TextView' and contains(@text, 'Sorry, not interested')]")
     private var sorryNotInterestedButton: WebElement? = null
 
+    @AndroidFindBy(xpath="//android.widget.FrameLayout[@resource-id='cz.csas.georgego:id/action_contact']")
+    private var contactBtn: WebElement? = null
+
 
     fun waitForOverviewPage(){
         testUtils.waitForWebElement(driver, overviewHeader)
@@ -39,6 +42,10 @@ class OverviewPage(driver: AppiumDriver, testUtils: TestUtils): BasePage(driver,
 
     fun clickSorryNotInterestedBtn(){
         sorryNotInterestedButton?.click()
+    }
+
+    fun clickContactBtn(){
+        contactBtn?.click()
     }
 
 }

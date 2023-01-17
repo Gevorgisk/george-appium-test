@@ -10,7 +10,7 @@ import org.testng.annotations.Test
  * Created By Gevorg Iskandaryan
  * This test does first login and makes new transfer
  */
-class FirstLoginNewTransferTestOwnAccount : LoginBaseTest() {
+class FirstLoginNewTransferOwnAccountTest : LoginBaseTest() {
 
     @Test
     fun loginViaPattern() {
@@ -19,7 +19,7 @@ class FirstLoginNewTransferTestOwnAccount : LoginBaseTest() {
     }
 
     @DataProvider(name = "transferInputs")
-    fun primeNumbers(): Array<Array<Any>> {
+    fun testInputs(): Array<Array<Any>> {
         return arrayOf(
             arrayOf("400", true, true),
             arrayOf("0", false, false),
